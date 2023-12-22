@@ -46,8 +46,9 @@ height = 500
 # создание окна
 window = display.set_mode((width, height))
 display.set_caption("Ping Pong")
-back = (200, 255, 255)  # цвет заливки для фона
-window.fill(back)  # заливка фона
+img_back = 'background.jpg'
+background = transform.scale(image.load(img_back), (width, height))
+
 
 
 
@@ -66,8 +67,8 @@ racket2 = Player('racket.png', 520, 200 , 50, 150, 4)
 ball = GameSprite('tenis_ball.png', 200, 200, 50, 50, 4)
 
 font.init()
-font1 = font.SysFont('Arial', 36)
-font2 = font.SysFont('Arial', 20)
+font1 = font.SysFont('Arial', 36, bold=True)
+font2 = font.SysFont('Arial', 22, bold=True)
 lose1 = font1.render('Игрок 1 проиграл!', True, (180, 0, 0))
 lose2 = font1.render('Игрок 2 проиграл!', True, (0, 0, 180))
 while game:
@@ -76,7 +77,8 @@ while game:
             game = False
 
     if finish != True:
-        window.fill(back)
+        window.blit(background, (0, 0))
+
 
         text_1 = font2.render(f'Счёт игрока 1: {score_1}', True, (0, 0, 0))
         text_2 = font2.render(f'Счёт игрока 2: {score_2}', True, (0, 0, 0))
@@ -90,8 +92,19 @@ while game:
 
         if sprite.collide_rect(racket1, ball):
             ball_x *= -1
+            ball_x += 0.2
+            if ball_y > 0:
+                ball_y += 0.2
+            else:
+                ball_y -= 0.2
         if sprite.collide_rect(racket2, ball):
             ball_x *= -1
+            ball_x -= 0.2
+            if ball_y > 0:
+                ball_y += 0.2
+            else:
+                ball_y -= 0.2
+
         if ball.rect.y < 0 or ball.rect.y > height - 50:
             ball_y *= -1
         
@@ -122,5 +135,4 @@ while game:
       
     display.update()
     clock.tick(FPS)
-
 
